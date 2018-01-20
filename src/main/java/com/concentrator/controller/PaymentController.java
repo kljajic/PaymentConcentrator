@@ -45,11 +45,11 @@ public class PaymentController {
 	
 	@PostMapping
 	@ResponseBody
-	public void pay(@RequestBody Uplata uplata, HttpServletResponse response) throws IOException{
+	public String pay(@RequestBody Uplata uplata, HttpServletResponse response) throws IOException{
 		try {
 			Payment payment = paypalService.createPayment(
-					uplata.getIznos(), 
-					"RSD", 
+					20.00,//uplata.getIznos(), 
+					"USD", 
 					"paypal", 
 					"sale",
 					"Insurance sale", 
@@ -57,12 +57,13 @@ public class PaymentController {
 					successUrl + '/' + uplata.getId());
 			for(Links links : payment.getLinks()){
 				if(links.getRel().equals("approval_url")){
-					response.sendRedirect(links.getHref());
+					return links.getHref();
 				}
 			}
 		} catch (PayPalRESTException e) {
 			e.printStackTrace();
 		}
+		return cancelUrl + '/' + uplata.getId();
 	}
 	
 	@GetMapping("/cancel/{uplataId}")

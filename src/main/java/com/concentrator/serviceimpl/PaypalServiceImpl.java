@@ -57,7 +57,7 @@ public class PaypalServiceImpl implements PaypalService {
 		Payment payment = new Payment();
 		payment.setId(paymentId);
 		PaymentExecution paymentExecution = new PaymentExecution();
-		paymentExecution.setPayerId(paymentId);
+		paymentExecution.setPayerId(payerId);
 		return payment.execute(apiContext, paymentExecution);
 	}
 
