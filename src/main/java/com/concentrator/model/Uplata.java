@@ -17,7 +17,7 @@ public class Uplata implements Serializable{
 	private String errorUrl;
 	private Osiguranje osiguranje;
 	private StatusUplate status;
-	private String nacinPlacanja;
+	private TipUplate tipUplate;
 	
 	public Uplata() {
 	}
@@ -88,12 +88,12 @@ public class Uplata implements Serializable{
 		this.osiguranje = osiguranje;
 	}
 
-	public String getNacinPlacanja() {
-		return nacinPlacanja;
+	public TipUplate getTipUplate() {
+		return tipUplate;
 	}
 
-	public void setNacinPlacanja(String nacinPlacanja) {
-		this.nacinPlacanja = nacinPlacanja;
+	public void setTipUplate(TipUplate tipUplate) {
+		this.tipUplate = tipUplate;
 	}
 	
 }

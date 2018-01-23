@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.concentrator.model.Uplata;
 import com.concentrator.service.PaypalService;
 import com.paypal.api.payments.Amount;
+import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payer;
 import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.PaymentExecution;
@@ -19,11 +22,34 @@ import com.paypal.base.rest.PayPalRESTException;
 @Service
 public class PaypalServiceImpl implements PaypalService {
 
+	@Value("${paypal.success_url}")
+	private String successUrl;
+	@Value("${paypal.cancel_url}")
+	private String cancelUrl;
+	
 	private final APIContext apiContext;
 	
 	@Autowired
 	public PaypalServiceImpl(APIContext apiContext) {
 		this.apiContext = apiContext;
+	}
+	
+	@Override
+	public String getPaymentLink(Uplata uplata) throws PayPalRESTException {
+		Payment payment = this.createPayment(
+			20.00,//uplata.getIznos(), 
+			"USD", 
+			"paypal", 
+			"sale",
+			"Insurance sale", 
+			cancelUrl + "/" + uplata.getId(), 
+			successUrl + "/" + uplata.getId());
+		for(Links links : payment.getLinks()){
+			if(links.getRel().equals("approval_url")){
+				return links.getHref();
+			}
+		}
+		return cancelUrl + "/" + uplata.getId();
 	}
 	
 	@Override
