@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.concentrator.config.DatabaseUri;
+import com.concentrator.model.RezultatTransakcije;
 import com.concentrator.model.Uplata;
 import com.concentrator.service.PaypalService;
 import com.paypal.api.payments.Payment;
@@ -46,13 +47,8 @@ public class PaymentController {
 	}
 	
 	@GetMapping("/cancel/{uplataId}")
-	public void cancelPay(@PathVariable("uplataId")Long uplataId){
+	public void cancelPayPal(@PathVariable("uplataId")Long uplataId){
 		restTemplate.postForObject(databaseUri.getPaymentHandler() + "/payment/cancel", uplataId, Void.class);
-	}
-	
-	@GetMapping("/successUplata/{uplataId}")
-	public void successPay(@PathVariable("uplataId")Long uplataId){
-		restTemplate.postForObject(databaseUri.getPaymentHandler() + "/payment/success", uplataId, Void.class);
 	}
 
 	@GetMapping("/success/{uplataId}")
@@ -69,6 +65,16 @@ public class PaymentController {
 			e.printStackTrace();
 		}
 		restTemplate.postForObject(databaseUri.getPaymentHandler() + "/payment/error", uplataId, Void.class);
+	}
+	
+	@PostMapping("/successUplata/{uplataId}")
+	public void successUplata(@RequestBody RezultatTransakcije rezultatTransakcije, @PathVariable("uplataId")Long uplataId){
+		restTemplate.postForObject(databaseUri.getPaymentHandler() + "/payment/success", uplataId, Void.class);
+	}
+	
+	@GetMapping("/cancelUplata/{uplataId}")
+	public void cancelUplata(@RequestBody RezultatTransakcije rezultatTransakcije, @PathVariable("uplataId")Long uplataId){
+		restTemplate.postForObject(databaseUri.getPaymentHandler() + "/payment/success", uplataId, Void.class);
 	}
 	
 }
