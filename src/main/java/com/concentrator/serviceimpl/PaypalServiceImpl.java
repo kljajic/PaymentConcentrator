@@ -37,7 +37,7 @@ public class PaypalServiceImpl implements PaypalService {
 	@Override
 	public String getPaymentLink(Uplata uplata) throws PayPalRESTException {
 		Payment payment = this.createPayment(
-			20.00,//uplata.getIznos(), 
+			uplata.getIznos(), 
 			"USD", 
 			"paypal", 
 			"sale",

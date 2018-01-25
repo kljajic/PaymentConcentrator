@@ -39,7 +39,7 @@ public class PaymentController {
 			case "PAYPAL":
 				return paypalService.getPaymentLink(uplata);
 			case "ACQUIRER":
-				return restTemplate.postForObject(databaseUri.getBankUri() + "/api/placanje/generisiPlacanjeLink", uplata, String.class);
+				return restTemplate.postForObject(databaseUri.getBankUri() + "/api/placanje/generisiPlacanjeLink/"+uplata.getOsiguranje().getId(), uplata, String.class);
 			default:
 				return "";
 		}
