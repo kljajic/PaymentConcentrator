@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.concentrator.config.PaypalConfig;
 import com.concentrator.model.Uplata;
 import com.concentrator.service.PaypalService;
 import com.paypal.api.payments.Amount;
@@ -16,7 +17,6 @@ import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.PaymentExecution;
 import com.paypal.api.payments.RedirectUrls;
 import com.paypal.api.payments.Transaction;
-import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
 
 @Service
@@ -27,11 +27,11 @@ public class PaypalServiceImpl implements PaypalService {
 	@Value("${paypal.cancel_url}")
 	private String cancelUrl;
 	
-	private final APIContext apiContext;
+	private final PaypalConfig payPalConfig;
 	
 	@Autowired
-	public PaypalServiceImpl(APIContext apiContext) {
-		this.apiContext = apiContext;
+	public PaypalServiceImpl(PaypalConfig payPalConfig) {
+		this.payPalConfig = payPalConfig;
 	}
 	
 	@Override
@@ -75,7 +75,7 @@ public class PaypalServiceImpl implements PaypalService {
 		redirectUrls.setReturnUrl(successUrl);
 		payment.setRedirectUrls(redirectUrls);
 		
-		return payment.create(apiContext);
+		return payment.create(payPalConfig.apiContext());
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class PaypalServiceImpl implements PaypalService {
 		payment.setId(paymentId);
 		PaymentExecution paymentExecution = new PaymentExecution();
 		paymentExecution.setPayerId(payerId);
-		return payment.execute(apiContext, paymentExecution);
+		return payment.execute(payPalConfig.apiContext(), paymentExecution);
 	}
 
 }
