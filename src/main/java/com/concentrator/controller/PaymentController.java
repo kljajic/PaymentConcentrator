@@ -72,7 +72,7 @@ public class PaymentController {
 		restTemplate.postForObject(databaseUri.getPaymentHandler() + "/payment/success", uplataId, Void.class);
 	}
 	
-	@GetMapping("/cancelUplata/{uplataId}")
+	@PostMapping("/cancelUplata/{uplataId}")
 	public void cancelUplata(@RequestBody RezultatTransakcije rezultatTransakcije, @PathVariable("uplataId")Long uplataId){
 		restTemplate.postForObject(databaseUri.getPaymentHandler() + "/payment/cancel", uplataId, Void.class);
 	}
